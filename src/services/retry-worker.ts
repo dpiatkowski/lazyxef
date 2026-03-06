@@ -3,12 +3,19 @@ import type { InvoiceService } from "./invoice-service.ts";
 
 export class RetryWorker {
   private timer: NodeJS.Timeout | null = null;
+  private readonly repository: InvoiceRepository;
+  private readonly invoiceService: InvoiceService;
+  private readonly intervalMs: number;
 
   constructor(
-    private readonly repository: InvoiceRepository,
-    private readonly invoiceService: InvoiceService,
-    private readonly intervalMs: number,
-  ) {}
+    repository: InvoiceRepository,
+    invoiceService: InvoiceService,
+    intervalMs: number,
+  ) {
+    this.repository = repository;
+    this.invoiceService = invoiceService;
+    this.intervalMs = intervalMs;
+  }
 
   start(): void {
     if (this.timer) {

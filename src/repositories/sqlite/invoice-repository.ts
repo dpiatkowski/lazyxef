@@ -2,7 +2,11 @@ import type Database from "better-sqlite3";
 import type { InvoiceAttempt, InvoiceStatus, PendingJob } from "../../types.ts";
 
 export class InvoiceRepository {
-  constructor(private readonly db: Database.Database) {}
+  private readonly db: Database.Database;
+
+  constructor(db: Database.Database) {
+    this.db = db;
+  }
 
   createAttempt(params: {
     saleDate: string;

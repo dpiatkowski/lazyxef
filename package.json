@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "node --watch --experimental-strip-types --experimental-transform-types src/server.ts",
-    "start": "node --experimental-strip-types --experimental-transform-types src/server.ts",
-    "test": "node --test --experimental-strip-types --experimental-transform-types test/*.test.ts"
+    "dev": "node --watch src/server.ts",
+    "start": "node src/server.ts",
+    "test": "node --test test/*.test.ts"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",

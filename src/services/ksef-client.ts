@@ -9,7 +9,11 @@ type KsefClientConfig = {
 };
 
 export class KsefClient {
-  constructor(private readonly config: KsefClientConfig) {}
+  private readonly config: KsefClientConfig;
+
+  constructor(config: KsefClientConfig) {
+    this.config = config;
+  }
 
   async submitInvoice(payload: unknown): Promise<KsefSubmitResult> {
     if (this.config.simulate) {

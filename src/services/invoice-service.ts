@@ -27,12 +27,22 @@ type InvoiceConfig = {
 };
 
 export class InvoiceService {
+  private readonly repository: InvoiceRepository;
+  private readonly contractorsStore: ContractorsStore;
+  private readonly ksefClient: KsefClient;
+  private readonly config: InvoiceConfig;
+
   constructor(
-    private readonly repository: InvoiceRepository,
-    private readonly contractorsStore: ContractorsStore,
-    private readonly ksefClient: KsefClient,
-    private readonly config: InvoiceConfig,
-  ) {}
+    repository: InvoiceRepository,
+    contractorsStore: ContractorsStore,
+    ksefClient: KsefClient,
+    config: InvoiceConfig,
+  ) {
+    this.repository = repository;
+    this.contractorsStore = contractorsStore;
+    this.ksefClient = ksefClient;
+    this.config = config;
+  }
 
   validateInput(input: unknown) {
     return inputSchema.parse(input);

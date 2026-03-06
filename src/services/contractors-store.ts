@@ -14,8 +14,11 @@ const contractorsSchema = z.array(contractorSchema).min(1);
 
 export class ContractorsStore {
   private contractors: Contractor[] = [];
+  private readonly filePath: string;
 
-  constructor(private readonly filePath: string) {}
+  constructor(filePath: string) {
+    this.filePath = filePath;
+  }
 
   load(): Contractor[] {
     const absolute = path.resolve(process.cwd(), this.filePath);
