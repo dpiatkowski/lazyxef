@@ -1,7 +1,7 @@
 import type { InvoiceRepository } from "../repositories/sqlite/invoice-repository.ts";
 import type { InvoiceService } from "./invoice-service.ts";
 
-export class RetryWorker {
+export class RetryWorker implements Disposable {
   #timer: NodeJS.Timeout | null = null;
   #repository: InvoiceRepository;
   #invoiceService: InvoiceService;
@@ -29,11 +29,8 @@ export class RetryWorker {
     void this.#tick();
   }
 
-  stop(): void {
-    if (!this.#timer) {
-      return;
-    }
-    clearInterval(this.#timer);
+  [Symbol.dispose](): void {
+    this.#timer?.[Symbol.dispose]();
     this.#timer = null;
   }
 
