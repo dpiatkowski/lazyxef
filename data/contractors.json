@@ -1,0 +1,14 @@
+[
+  {
+    "id": "c1",
+    "name": "Firma A Sp. z o.o.",
+    "nip": "1234567890",
+    "address": "ul. Kwiatowa 1, 00-001 Warszawa"
+  },
+  {
+    "id": "c2",
+    "name": "Firma B S.A.",
+    "nip": "0987654321",
+    "address": "ul. Lesna 2, 30-001 Krakow"
+  }
+]

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Szczegoly faktury</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 2rem; max-width: 1000px; }
+    pre { background: #f3f4f6; padding: 1rem; overflow: auto; }
+    table { border-collapse: collapse; width: 100%; margin-top: 1rem; }
+    th, td { border: 1px solid #d1d5db; padding: 0.5rem; }
+  </style>
+</head>
+<body>
+  <p><a href="/invoices">Powrot do historii</a></p>
+  <h1>Faktura #<%= it.attempt.id %></h1>
+  <p>Status: <strong><%= it.attempt.status %></strong></p>
+  <p>Kontrahent: <%= it.contractor ? it.contractor.name : it.attempt.contractor_id %></p>
+  <p>KSeF reference: <%= it.attempt.ksef_reference || '-' %></p>
+  <p>KSeF document ID: <%= it.attempt.ksef_document_id || '-' %></p>
+  <p>Last error: <%= it.attempt.last_error || '-' %></p>
+
+  <% if (it.attempt.status !== 'accepted') { %>
+    <form method="post" action="/invoices/<%= it.attempt.id %>/retry">
+      <button type="submit">Ponow wysylke</button>
+    </form>
+  <% } %>
+
+  <h2>Payload</h2>
+  <pre><%= JSON.stringify(it.payload, null, 2) %></pre>
+
+  <h2>Eventy KSeF</h2>
+  <table>
+    <thead>
+      <tr><th>Czas</th><th>Typ</th><th>HTTP</th><th>Kod bledu</th></tr>
+    </thead>
+    <tbody>
+      <% if (it.events.length === 0) { %>
+        <tr><td colspan="4">Brak eventow</td></tr>
+      <% } %>
+      <% it.events.forEach((e) => { %>
+        <tr>
+          <td><%= e.event_time %></td>
+          <td><%= e.event_type %></td>
+          <td><%= e.http_status || '-' %></td>
+          <td><%= e.error_code || '-' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>

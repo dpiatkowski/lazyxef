@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Historia faktur</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 2rem; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #d1d5db; padding: 0.5rem; }
+  </style>
+</head>
+<body>
+  <h1>Historia faktur</h1>
+  <p><a href="/">Nowa faktura</a></p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Data</th>
+        <th>Kontrahent</th>
+        <th>Ilosc</th>
+        <th>Status</th>
+        <th>KSeF ID</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (it.attempts.length === 0) { %>
+        <tr><td colspan="6">Brak danych</td></tr>
+      <% } %>
+      <% it.attempts.forEach((a) => { %>
+        <% const contractor = it.contractors.find((c) => c.id === a.contractor_id) %>
+        <tr>
+          <td><a href="/invoices/<%= a.id %>">#<%= a.id %></a></td>
+          <td><%= a.created_at %></td>
+          <td><%= contractor ? contractor.name : a.contractor_id %></td>
+          <td><%= a.quantity %></td>
+          <td><%= a.status %></td>
+          <td><%= a.ksef_document_id || '-' %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</body>
+</html>

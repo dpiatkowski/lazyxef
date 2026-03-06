@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KSeF Lite</title>
+  <style>
+    body { font-family: ui-sans-serif, system-ui, sans-serif; margin: 2rem; max-width: 860px; }
+    fieldset { margin: 1rem 0; }
+    .error { color: #b91c1c; margin-bottom: 1rem; }
+    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+    label { display: block; margin-bottom: 0.35rem; }
+  </style>
+</head>
+<body>
+  <h1>Wystaw fakture KSeF</h1>
+  <% if (it.error) { %>
+    <p class="error"><%= it.error %></p>
+  <% } %>
+
+  <form method="post" action="/invoices">
+    <fieldset>
+      <legend>Kontrahent</legend>
+      <% it.contractors.forEach((c) => { %>
+        <label>
+          <input
+            type="radio"
+            name="contractorId"
+            value="<%= c.id %>"
+            <%= it.form.contractorId === c.id ? 'checked' : '' %>
+          />
+          <strong><%= c.name %></strong> (NIP: <%= c.nip %>)<br />
+          <small><%= c.address %></small>
+        </label>
+      <% }) %>
+    </fieldset>
+
+    <label>
+      Ilosc
+      <input type="number" step="0.01" min="0.01" name="quantity" value="<%= it.form.quantity %>" required />
+    </label>
+
+    <label>
+      Data sprzedazy
+      <input type="date" name="saleDate" value="<%= it.form.saleDate %>" required />
+    </label>
+
+    <div class="actions">
+      <button type="submit">Wyslij do KSeF</button>
+      <a href="/invoices">Historia</a>
+    </div>
+  </form>
+
+  <form method="post" action="/admin/reload-contractors" style="margin-top: 1rem;">
+    <button type="submit">Przeladuj kontrahentow z JSON</button>
+  </form>
+</body>
+</html>
