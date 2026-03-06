@@ -27,7 +27,7 @@ worker.start();
 
 const app = createApp({ contractorsStore, invoiceService, repository });
 
-serve(
+const server = serve(
   {
     fetch: app.fetch,
     port: appConfig.port,
@@ -36,3 +36,35 @@ serve(
     console.log(`KSeF Lite listening on http://localhost:${info.port}`);
   },
 );
+
+let shuttingDown = false;
+
+const stopWorker = () => {
+  worker.stop();
+};
+
+const shutdown = (signal: NodeJS.Signals) => {
+  if (shuttingDown) {
+    return;
+  }
+
+  shuttingDown = true;
+  stopWorker();
+
+  server.close((error) => {
+    if (error) {
+      console.error(`Error while shutting down after ${signal}:`, error);
+      process.exitCode = 1;
+    }
+  });
+};
+
+server.once("close", stopWorker);
+
+process.once("SIGINT", () => {
+  shutdown("SIGINT");
+});
+
+process.once("SIGTERM", () => {
+  shutdown("SIGTERM");
+});
