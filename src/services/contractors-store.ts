@@ -13,15 +13,15 @@ const contractorSchema = z.object({
 const contractorsSchema = z.array(contractorSchema).min(1);
 
 export class ContractorsStore {
-  private contractors: Contractor[] = [];
-  private readonly filePath: string;
+  #contractors: Contractor[] = [];
+  #filePath: string;
 
   constructor(filePath: string) {
-    this.filePath = filePath;
+    this.#filePath = filePath;
   }
 
   load(): Contractor[] {
-    const absolute = path.resolve(process.cwd(), this.filePath);
+    const absolute = path.resolve(process.cwd(), this.#filePath);
     const raw = fs.readFileSync(absolute, "utf-8");
     const parsed = JSON.parse(raw);
     const contractors = contractorsSchema.parse(parsed);
@@ -34,15 +34,15 @@ export class ContractorsStore {
       ids.add(contractor.id);
     }
 
-    this.contractors = contractors;
-    return this.contractors;
+    this.#contractors = contractors;
+    return this.#contractors;
   }
 
   list(): Contractor[] {
-    return this.contractors;
+    return this.#contractors;
   }
 
   getById(id: string): Contractor | undefined {
-    return this.contractors.find((item) => item.id === id);
+    return this.#contractors.find((item) => item.id === id);
   }
 }

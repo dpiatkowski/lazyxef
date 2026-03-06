@@ -2,55 +2,55 @@ import type { InvoiceRepository } from "../repositories/sqlite/invoice-repositor
 import type { InvoiceService } from "./invoice-service.ts";
 
 export class RetryWorker {
-  private timer: NodeJS.Timeout | null = null;
-  private readonly repository: InvoiceRepository;
-  private readonly invoiceService: InvoiceService;
-  private readonly intervalMs: number;
+  #timer: NodeJS.Timeout | null = null;
+  #repository: InvoiceRepository;
+  #invoiceService: InvoiceService;
+  #intervalMs: number;
 
   constructor(
     repository: InvoiceRepository,
     invoiceService: InvoiceService,
     intervalMs: number,
   ) {
-    this.repository = repository;
-    this.invoiceService = invoiceService;
-    this.intervalMs = intervalMs;
+    this.#repository = repository;
+    this.#invoiceService = invoiceService;
+    this.#intervalMs = intervalMs;
   }
 
   start(): void {
-    if (this.timer) {
+    if (this.#timer) {
       return;
     }
 
-    this.timer = setInterval(() => {
-      void this.tick();
-    }, this.intervalMs);
+    this.#timer = setInterval(() => {
+      void this.#tick();
+    }, this.#intervalMs);
 
-    void this.tick();
+    void this.#tick();
   }
 
   stop(): void {
-    if (!this.timer) {
+    if (!this.#timer) {
       return;
     }
-    clearInterval(this.timer);
-    this.timer = null;
+    clearInterval(this.#timer);
+    this.#timer = null;
   }
 
-  private async tick(): Promise<void> {
-    const jobs = this.repository.getDuePendingJobs(new Date().toISOString(), 20);
+  async #tick(): Promise<void> {
+    const jobs = this.#repository.getDuePendingJobs(new Date().toISOString(), 20);
 
     for (const job of jobs) {
-      this.repository.markJobProcessing(job.id);
+      this.#repository.markJobProcessing(job.id);
       const nextAttempt = job.attempt_count + 1;
 
       try {
-        await this.invoiceService.retrySend(job.invoice_attempt_id);
-        this.repository.markJobDone(job.id);
+        await this.#invoiceService.retrySend(job.invoice_attempt_id);
+        this.#repository.markJobDone(job.id);
       } catch (error) {
         if (nextAttempt >= job.max_attempts) {
-          this.repository.markJobFailed(job.id);
-          this.repository.updateAttempt(job.invoice_attempt_id, {
+          this.#repository.markJobFailed(job.id);
+          this.#repository.updateAttempt(job.invoice_attempt_id, {
             status: "failed",
             last_error: error instanceof Error ? error.message : "Retry attempts exceeded",
           });
@@ -59,7 +59,7 @@ export class RetryWorker {
 
         const delayMs = Math.min(300_000, 30_000 * nextAttempt);
         const runAfter = new Date(Date.now() + delayMs).toISOString();
-        this.repository.rescheduleJob({
+        this.#repository.rescheduleJob({
           id: job.id,
           runAfter,
           attemptCount: nextAttempt,

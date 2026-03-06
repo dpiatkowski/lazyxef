@@ -9,14 +9,14 @@ type KsefClientConfig = {
 };
 
 export class KsefClient {
-  private readonly config: KsefClientConfig;
+  #config: KsefClientConfig;
 
   constructor(config: KsefClientConfig) {
-    this.config = config;
+    this.#config = config;
   }
 
   async submitInvoice(payload: unknown): Promise<KsefSubmitResult> {
-    if (this.config.simulate) {
+    if (this.#config.simulate) {
       const seed = crypto.createHash("sha1").update(JSON.stringify(payload)).digest("hex").slice(0, 12);
       return {
         ksefReference: `SIM-REF-${seed}`,
@@ -26,14 +26,14 @@ export class KsefClient {
     }
 
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), this.config.timeoutMs);
+    const timer = setTimeout(() => controller.abort(), this.#config.timeoutMs);
 
     try {
-      const response = await fetch(`${this.config.baseUrl}/submit`, {
+      const response = await fetch(`${this.#config.baseUrl}/submit`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: this.config.apiToken ? `Bearer ${this.config.apiToken}` : "",
+          Authorization: this.#config.apiToken ? `Bearer ${this.#config.apiToken}` : "",
         },
         body: JSON.stringify(payload),
         signal: controller.signal,
