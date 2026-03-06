@@ -1,4 +1,4 @@
-import type { DatabaseSync } from "node:sqlite";
+import type { DatabaseSync, SQLInputValue } from "node:sqlite";
 import type { InvoiceAttempt, InvoiceStatus, PendingJob } from "../../types.ts";
 
 export class InvoiceRepository {
@@ -25,7 +25,7 @@ export class InvoiceRepository {
 
   updateAttempt(id: number, patch: Partial<Pick<InvoiceAttempt, "status" | "ksef_reference" | "ksef_document_id" | "last_error">>): void {
     const columns: string[] = [];
-    const values: Record<string, unknown> = { id };
+    const values: Record<string, SQLInputValue> = { id };
 
     for (const [key, value] of Object.entries(patch)) {
       columns.push(`${key} = @${key}`);
