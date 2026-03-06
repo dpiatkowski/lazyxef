@@ -52,7 +52,7 @@ This is a local Polish e-invoicing (KSeF) app built with **Hono + SQLite**. It i
 | Types | `src/types.ts` | Shared domain types |
 | HTTP routes | `src/app.ts` | Hono route handlers, Eta templating |
 | Services | `src/services/` | Business logic (invoice, retry, contractors) |
-| Repository | `src/repositories/sqlite/` | SQLite access via `better-sqlite3` |
+| Repository | `src/repositories/sqlite/` | SQLite access via Node's built-in `node:sqlite` |
 | Templates | `src/views/*.eta` | Server-rendered HTML (Eta engine) |
 | Data | `data/contractors.json` | Static contractor list (hot-reloadable via `POST /admin/reload-contractors`) |
 

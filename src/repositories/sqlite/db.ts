@@ -1,16 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
-import Database from "better-sqlite3";
+import { DatabaseSync } from "node:sqlite";
 
-export const openDatabase = (databasePath: string): Database.Database => {
+export const openDatabase = (databasePath: string): DatabaseSync => {
   const absolute = path.resolve(process.cwd(), databasePath);
   fs.mkdirSync(path.dirname(absolute), { recursive: true });
-  const db = new Database(absolute);
-  db.pragma("journal_mode = WAL");
+  const db = new DatabaseSync(absolute, { timeout: 5_000 });
+  db.exec("PRAGMA journal_mode = WAL;");
   return db;
 };
 
-export const initSchema = (db: Database.Database): void => {
+export const initSchema = (db: DatabaseSync): void => {
   db.exec(`
     CREATE TABLE IF NOT EXISTS invoice_attempts (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

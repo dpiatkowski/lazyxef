@@ -1,10 +1,10 @@
-import type Database from "better-sqlite3";
+import type { DatabaseSync } from "node:sqlite";
 import type { InvoiceAttempt, InvoiceStatus, PendingJob } from "../../types.ts";
 
 export class InvoiceRepository {
-  #db: Database.Database;
+  #db: DatabaseSync;
 
-  constructor(db: Database.Database) {
+  constructor(db: DatabaseSync) {
     this.#db = db;
   }
 
