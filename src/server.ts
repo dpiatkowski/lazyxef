@@ -1,12 +1,12 @@
 import { serve } from "@hono/node-server";
-import { appConfig } from "./config.js";
-import { createApp } from "./app.js";
-import { initSchema, openDatabase } from "./repositories/sqlite/db.js";
-import { InvoiceRepository } from "./repositories/sqlite/invoice-repository.js";
-import { ContractorsStore } from "./services/contractors-store.js";
-import { InvoiceService } from "./services/invoice-service.js";
-import { KsefClient } from "./services/ksef-client.js";
-import { RetryWorker } from "./services/retry-worker.js";
+import { appConfig } from "./config.ts";
+import { createApp } from "./app.ts";
+import { initSchema, openDatabase } from "./repositories/sqlite/db.ts";
+import { InvoiceRepository } from "./repositories/sqlite/invoice-repository.ts";
+import { ContractorsStore } from "./services/contractors-store.ts";
+import { InvoiceService } from "./services/invoice-service.ts";
+import { KsefClient } from "./services/ksef-client.ts";
+import { RetryWorker } from "./services/retry-worker.ts";
 
 const db = openDatabase(appConfig.databasePath);
 initSchema(db);

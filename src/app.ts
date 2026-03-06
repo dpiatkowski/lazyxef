@@ -1,10 +1,10 @@
 import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
-import { view } from "./lib/view.js";
-import type { InvoiceRepository } from "./repositories/sqlite/invoice-repository.js";
-import type { ContractorsStore } from "./services/contractors-store.js";
-import type { InvoiceService } from "./services/invoice-service.js";
+import { view } from "./lib/view.ts";
+import type { InvoiceRepository } from "./repositories/sqlite/invoice-repository.ts";
+import type { ContractorsStore } from "./services/contractors-store.ts";
+import type { InvoiceService } from "./services/invoice-service.ts";
 
 type CreateAppDeps = {
   contractorsStore: ContractorsStore;

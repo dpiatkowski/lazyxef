@@ -1,8 +1,8 @@
 import { z } from "zod";
-import type { InvoiceRepository } from "../repositories/sqlite/invoice-repository.js";
-import type { Contractor } from "../types.js";
-import type { ContractorsStore } from "./contractors-store.js";
-import type { KsefClient } from "./ksef-client.js";
+import type { InvoiceRepository } from "../repositories/sqlite/invoice-repository.ts";
+import type { Contractor } from "../types.ts";
+import type { ContractorsStore } from "./contractors-store.ts";
+import type { KsefClient } from "./ksef-client.ts";
 
 const inputSchema = z.object({
   contractorId: z.string().min(1, "Wybierz kontrahenta"),

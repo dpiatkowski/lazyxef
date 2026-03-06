@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { z } from "zod";
-import type { Contractor } from "../types.js";
+import type { Contractor } from "../types.ts";
 
 const contractorSchema = z.object({
   id: z.string().min(1),

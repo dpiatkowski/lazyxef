@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import type { KsefSubmitError, KsefSubmitResult } from "../types.js";
+import type { KsefSubmitError, KsefSubmitResult } from "../types.ts";
 
 type KsefClientConfig = {
   baseUrl: string;

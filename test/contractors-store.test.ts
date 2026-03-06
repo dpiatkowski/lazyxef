@@ -1,8 +1,9 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
-import { ContractorsStore } from "../src/services/contractors-store.js";
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { ContractorsStore } from "../src/services/contractors-store.ts";
 
 describe("ContractorsStore", () => {
   it("loads valid contractors", () => {
@@ -18,7 +19,7 @@ describe("ContractorsStore", () => {
 
     const store = new ContractorsStore(file);
     const contractors = store.load();
-    expect(contractors).toHaveLength(2);
+    assert.equal(contractors.length, 2);
   });
 
   it("throws for duplicate ids", () => {
@@ -33,6 +34,6 @@ describe("ContractorsStore", () => {
     );
 
     const store = new ContractorsStore(file);
-    expect(() => store.load()).toThrow(/Duplicate contractor id/);
+    assert.throws(() => store.load(), /Duplicate contractor id/);
   });
 });

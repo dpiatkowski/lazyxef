@@ -1,5 +1,5 @@
 import type Database from "better-sqlite3";
-import type { InvoiceAttempt, InvoiceStatus, PendingJob } from "../../types.js";
+import type { InvoiceAttempt, InvoiceStatus, PendingJob } from "../../types.ts";
 
 export class InvoiceRepository {
   constructor(private readonly db: Database.Database) {}

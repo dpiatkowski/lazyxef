@@ -1,5 +1,5 @@
-import type { InvoiceRepository } from "../repositories/sqlite/invoice-repository.js";
-import type { InvoiceService } from "./invoice-service.js";
+import type { InvoiceRepository } from "../repositories/sqlite/invoice-repository.ts";
+import type { InvoiceService } from "./invoice-service.ts";
 
 export class RetryWorker {
   private timer: NodeJS.Timeout | null = null;

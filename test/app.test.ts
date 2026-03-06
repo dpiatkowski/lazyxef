@@ -1,13 +1,14 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { describe, expect, it } from "vitest";
-import { createApp } from "../src/app.js";
-import { initSchema, openDatabase } from "../src/repositories/sqlite/db.js";
-import { InvoiceRepository } from "../src/repositories/sqlite/invoice-repository.js";
-import { ContractorsStore } from "../src/services/contractors-store.js";
-import { InvoiceService } from "../src/services/invoice-service.js";
-import { KsefClient } from "../src/services/ksef-client.js";
+import assert from "node:assert/strict";
+import { describe, it } from "node:test";
+import { createApp } from "../src/app.ts";
+import { initSchema, openDatabase } from "../src/repositories/sqlite/db.ts";
+import { InvoiceRepository } from "../src/repositories/sqlite/invoice-repository.ts";
+import { ContractorsStore } from "../src/services/contractors-store.ts";
+import { InvoiceService } from "../src/services/invoice-service.ts";
+import { KsefClient } from "../src/services/ksef-client.ts";
 
 const setup = () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "ksef-lite-"));
@@ -44,8 +45,8 @@ describe("app", () => {
   it("renders home page", async () => {
     const app = setup();
     const response = await app.request("/");
-    expect(response.status).toBe(200);
-    expect(await response.text()).toContain("Wystaw fakture KSeF");
+    assert.equal(response.status, 200);
+    assert.match(await response.text(), /Wystaw fakture KSeF/);
   });
 
   it("validates invalid invoice", async () => {
@@ -56,7 +57,7 @@ describe("app", () => {
       headers: { "content-type": "application/x-www-form-urlencoded" },
       body: form.toString(),
     });
-    expect(response.status).toBe(400);
+    assert.equal(response.status, 400);
   });
 
   it("creates invoice in simulated mode", async () => {
@@ -68,8 +69,8 @@ describe("app", () => {
       body: form.toString(),
     });
 
-    expect(response.status).toBe(302);
+    assert.equal(response.status, 302);
     const location = response.headers.get("location");
-    expect(location).toMatch(/^\/invoices\/[0-9]+$/);
+    assert.match(location ?? "", /^\/invoices\/[0-9]+$/);
   });
 });
