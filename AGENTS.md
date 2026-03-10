@@ -15,7 +15,7 @@ npm run start
 npm test
 
 # Run a single test file
-npx vitest run test/app.test.ts
+node --test test/app.test.ts
 ```
 
 No build step is required — the app uses Node's `--experimental-strip-types` to run TypeScript directly.
@@ -63,4 +63,4 @@ This is a local Polish e-invoicing (KSeF) app built with **Hono + SQLite**. It i
 
 **Contractors** are loaded from `data/contractors.json` into `ContractorsStore` (in-memory). Each must have a unique `id` and a 10-digit `nip`. Reload without restart: `POST /admin/reload-contractors`.
 
-**Tests** use Vitest and construct the full app in-process with a temp SQLite file and `KSEF_SIMULATE=true`. No mocking framework — real classes wired together.
+**Tests** use Node's built-in test runner and construct the full app in-process with a temp SQLite file and `KSEF_SIMULATE=true`. No mocking framework — real classes wired together.
